@@ -24,6 +24,8 @@ services:
       MYSQL_USER: impressoras
       MYSQL_PASSWORD: impressoras
       MYSQL_ROOT_PASSWORD: impressoras
+    volumes:
+      - mariadb_data:/var/lib/mysql
     networks:
       - impressoras-network
 
@@ -59,5 +61,33 @@ services:
     networks:
       - impressoras-network
 
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: impressoras_phpmyadmin
+    restart: always
+    depends_on:
+      - mariadb
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: impressoras
+    networks:
+      - impressoras-network
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: impressoras_mailpit
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # Interface Web
+    networks:
+      - impressoras-network
+
 networks:
   impressoras-network:
+
+volumes:
+  mariadb_data:

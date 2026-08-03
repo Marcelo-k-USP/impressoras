@@ -12,7 +12,7 @@ class ReplicadoTemp
     public static function listarMonitores($codslamon)
     {
         $result = Beneficio::listarMonitoresProAluno($codslamon);
-        if(!empty($result)) return array_column($result,'codpes');
+        if(!empty($result) && is_array($result)) return array_column($result,'codpes');
         return [];
     }
 }
